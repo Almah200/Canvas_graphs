@@ -1,66 +1,81 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void initializeMatrix(int **matrix, int vertices) {
-    for (int i = 0; i < vertices; ++i) {
-        for (int j = 0; j < vertices; ++j) {
-            matrix[i][j] = 0;
+// Node structure
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+// Graph structure
+typedef struct Graph {
+    int vertices;
+    int** adjacencyMatrix;
+} Graph;
+
+// Function to initialize the adjacency matrix
+void initializeMatrix(int **adjMatrix, int vertices) {
+    for (int i = 0; i < vertices; i++) {
+        for (int j = 0; j < vertices; j++) {
+            adjMatrix[i][j] = 0;
         }
     }
 }
 
-void addEdge(int **matrix, int v1, int v2) {
-    f (v1 >= 0 && v1 < vertices && v2 >= 0 && v2 < vertices) {
-        matrix[v1][v2] = 1;
-        matrix[v2][v1] = 1;
-    } else {
-        printf("Invalid vertices %d and %d\n", v1, v2);
-    }
-}
-
-void displayMatrix(int **matrix, int vertices) {
-    for (int i = 0; i < vertices; ++i) {
-        for (int j = 0; j < vertices; ++j) {
-            printf("%d ", matrix[i][j]);
+// Function to display the adjacency matrix
+void displayMatrix(int **adjMatrix, int vertices) {
+    for (int i = 0; i < vertices; i++) {
+        for (int j = 0; j < vertices; j++) {
+            printf("%d ", adjMatrix[i][j]);
         }
         printf("\n");
     }
 }
 
-void deleteGraph(int **matrix, int vertices) {
-    for (int i = 0; i < vertices; ++i) {
-        free(matrix[i]);
+// Function to delete the graph and free memory
+void deleteGraph(Graph* graph) {
+    // Free allocated memory for each row
+    for (int i = 0; i < graph->vertices; i++) {
+        free(graph->adjacencyMatrix[i]);
     }
-    free(matrix);
+    // Free the array of pointers and the graph structure
+    free(graph->adjacencyMatrix);
+    free(graph);
 }
 
 int main() {
-    int vertices, edges;
-
+    int vertices;
     printf("Enter the number of vertices: ");
     scanf("%d", &vertices);
 
-    printf("Enter the number of edges: ");
-    scanf("%d", &edges);
+    // Create a graph structure
+    Graph* myGraph = (Graph*)malloc(sizeof(Graph));
+    myGraph->vertices = vertices;
 
-    int **adjMatrix = (int **)malloc(vertices * sizeof(int *));
-    for (int i = 0; i < vertices; ++i) {
-        adjMatrix[i] = (int *)malloc(vertices * sizeof(int));
+    // Allocate memory for the adjacency matrix
+    myGraph->adjacencyMatrix = (int**)malloc(vertices * sizeof(int*));
+    for (int i = 0; i < vertices; i++) {
+        myGraph->adjacencyMatrix[i] = (int*)malloc(vertices * sizeof(int));
     }
 
-    initializeMatrix(adjMatrix, vertices);
+    initializeMatrix(myGraph->adjacencyMatrix, vertices);
 
-    printf("Enter the edges (format: v1 v2):\n");
-    for (int i = 0; i < edges; ++i) {
-        int v1, v2;
+    printf("Enter the edges (format: v1 v2). Enter -1 -1 to end:\n");
+    int v1, v2;
+    while (1) {
         scanf("%d %d", &v1, &v2);
-        addEdge(adjMatrix, v1, v2);
+        if (v1 == -1 || v2 == -1) {
+            break;
+        }
+        myGraph->adjacencyMatrix[v1][v2] = 1;
+        myGraph->adjacencyMatrix[v2][v1] = 1;
     }
 
     printf("Adjacency matrix:\n");
-    displayMatrix(adjMatrix, vertices);
+    displayMatrix(myGraph->adjacencyMatrix, vertices);
 
-    deleteGraph(adjMatrix, vertices);
+    // Deleting the graph and freeing memory
+    deleteGraph(myGraph);
 
     return 0;
 }
