@@ -38,6 +38,7 @@ task1.c:
 Compile the program using gcc task1.c -o task1.
 Run the executable ./task1.
 Follow the prompts to input the number of vertices and edges.
+while inputing the edges translate the countries into numbers from 0-11 representing the total number of the nodes/vertices. assinging each country to a number and keep note of that.
 task2.c:
 
 Include the necessary function calls in your program.

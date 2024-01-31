@@ -1,0 +1,4 @@
+1. Breadth First Search (BFS) is used to find the shortest path and minimum spanning tree for unweighted graphs.
+2.GPS Navigation systems use BFS to find all neighboring locations.
+3. Path Finding: We can specialize the DFS algorithm to find a path between two given vertices
+4. Finding Strongly Connected Components of a graph
